@@ -4,3 +4,4 @@ services:
       MOODLE_DOCKER_WEB_PORT: "${MOODLE_DOCKER_WEB_PORT}"
     ports:
       - "${MOODLE_DOCKER_WEB_PORT}:80"
+      # - "9004:9004"

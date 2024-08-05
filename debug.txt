@@ -1,0 +1,25 @@
+# Install XDebug extension with PECL
+moodle-docker-compose exec webserver pecl install xdebug
+
+# Set some wise setting for live debugging - change this as needed
+read -r -d '' conf <<'EOF'
+; Settings for Xdebug Docker configuration
+xdebug.mode = debug
+;xdebug.client_host = 'host.docker.internal'
+xdebug.client_host = 172.18.0.1
+xdebug.client_port = 9004
+xdebug.start_with_request=yes
+xdebug.log = "/tmp/xdebug.log"
+xdebug.discover_client_host = 1
+; Some IDEs (eg PHPSTORM, VSCODE) may require configuring an IDE key, uncomment if needed
+xdebug.idekey=VSCODE
+EOF
+bin/moodle-docker-compose exec webserver bash -c "echo '$conf' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini"
+
+# xóa dữ liệu
+docker exec -it 78e437 cat /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+
+# Enable XDebug extension in Apache and restart the webserver container
+bin/moodle-docker-compose exec webserver docker-php-ext-enable xdebug
+bin/moodle-docker-compose restart webserver
