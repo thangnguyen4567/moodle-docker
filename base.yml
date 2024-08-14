@@ -1,6 +1,7 @@
 services:
   webserver:
     image: "moodlehq/moodle-php-apache:${MOODLE_DOCKER_PHP_VERSION}"
+    container_name: thang_webserver
     depends_on:
       - db
     volumes:
@@ -15,3 +16,19 @@ services:
       MOODLE_DOCKER_WEB_HOST: "${MOODLE_DOCKER_WEB_HOST}"
       MOODLE_DOCKER_TIMEOUT_FACTOR: "${MOODLE_DOCKER_TIMEOUT_FACTOR}"
     restart: always
+    ports:
+      - "${MOODLE_DOCKER_WEB_PORT}:80"
+    # command: >
+    #   bash -c "
+    #   pecl install xdebug &&
+    #   docker-php-ext-enable xdebug &&
+
+    #   echo 'xdebug.mode = debug' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini &&
+    #   echo 'xdebug.client_host = docker.internal.host' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini &&
+    #   echo 'xdebug.client_port = 9004' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini &&
+    #   echo 'xdebug.start_with_request = yes' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini &&
+    #   echo 'xdebug.log = /tmp/xdebug.log' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini &&
+    #   echo 'xdebug.discover_client_host = 1' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini &&
+    #   echo 'xdebug.idekey=VSCODE' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini"
+    extra_hosts:
+      - host.docker.internal:host-gateway
